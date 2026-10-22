@@ -1,0 +1,415 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nomes Próprios Portugal</title>
+<style>
+  :root {
+    color-scheme: light dark;
+    --bg: #f7f6f3;
+    --fg: #1b1b1b;
+    --muted: #6b6b6b;
+    --card: #ffffff;
+    --border: #e2e0db;
+    --accent: #0a5f4e;
+    --accent-bg: #e4f2ee;
+    --f-color: #a3306b;
+    --f-bg: #fbe9f1;
+    --m-color: #1f5fa8;
+    --m-bg: #e8f1fb;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #17181a;
+      --fg: #ececec;
+      --muted: #9a9a9a;
+      --card: #202225;
+      --border: #33353a;
+      --accent: #3ddcb0;
+      --accent-bg: #123a30;
+      --f-color: #ff9fc7;
+      --f-bg: #3a1f2b;
+      --m-color: #8ec4ff;
+      --m-bg: #1b2d40;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--fg);
+  }
+  .wrap {
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 2rem 1.25rem 4rem;
+  }
+  h1 {
+    font-size: 1.5rem;
+    margin: 0 0 1rem;
+  }
+  .sub {
+    color: var(--muted);
+    font-size: 0.9rem;
+    margin: 0 0 1.5rem;
+    line-height: 1.5;
+  }
+  .sub a { color: var(--accent); }
+  .panel {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+  }
+  .search-row {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+  input[type="text"] {
+    flex: 1 1 240px;
+    font-size: 1rem;
+    padding: 0.65rem 0.8rem;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--fg);
+  }
+  input[type="text"]:focus { outline: 2px solid var(--accent); }
+  input[type="number"] {
+    width: 4.5rem;
+    font-size: 0.9rem;
+    padding: 0.5rem 0.6rem;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--fg);
+  }
+  input[type="number"]:focus { outline: 2px solid var(--accent); }
+  .len-label {
+    font-size: 0.85rem;
+    color: var(--muted);
+    align-self: center;
+  }
+  .btn, .chip {
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--fg);
+    border-radius: 8px;
+    padding: 0.6rem 0.9rem;
+    font-size: 0.9rem;
+    cursor: pointer;
+    user-select: none;
+  }
+  .btn.active, .chip.active {
+    background: var(--accent-bg);
+    border-color: var(--accent);
+    color: var(--accent);
+    font-weight: 600;
+  }
+  .controls {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+    flex-wrap: wrap;
+  }
+  .error {
+    color: #c0392b;
+    font-size: 0.85rem;
+    margin-top: 0.5rem;
+    min-height: 1.2em;
+  }
+  .hint {
+    color: var(--muted);
+    font-size: 0.8rem;
+    margin-top: 0.5rem;
+  }
+  code {
+    background: var(--accent-bg);
+    padding: 0.1em 0.35em;
+    border-radius: 4px;
+    font-size: 0.85em;
+  }
+  .count {
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin: 0.5rem 0.25rem;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 0.5rem;
+  }
+  .name {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.55rem 0.7rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    font-size: 0.95rem;
+  }
+  .tags {
+    display: flex;
+    gap: 0.3rem;
+    flex-shrink: 0;
+  }
+  .tag {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    padding: 0.15em 0.45em;
+    border-radius: 5px;
+    flex-shrink: 0;
+  }
+  .tag.F { color: var(--f-color); background: var(--f-bg); }
+  .tag.M { color: var(--m-color); background: var(--m-bg); }
+  mark {
+    background: var(--accent-bg);
+    color: var(--accent);
+    border-radius: 3px;
+    padding: 0 1px;
+  }
+  .empty {
+    text-align: center;
+    color: var(--muted);
+    padding: 3rem 1rem;
+  }
+  .pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1.25rem;
+  }
+  .pagination #pageInfo {
+    color: var(--muted);
+    font-size: 0.85rem;
+  }
+  .btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+  footer {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.8rem;
+    margin-top: 2.5rem;
+    line-height: 1.6;
+  }
+  footer a { color: var(--muted); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Nomes Próprios · Portugal</h1>
+  <p class="sub">
+    Lista de nomes próprios, baseada no
+    <a href="https://irn.justica.gov.pt/Portals/33/Regras%20Nome%20Proprio/Lista%20Nomes%20Pr%C3%B3prios.pdf?ver=WNDmmwiSO3uacofjmNoxEQ%3D%3D" target="_blank" rel="noopener">documento oficial do IRN</a>, de 2021.
+  </p>
+
+  <div class="panel">
+    <div class="search-row">
+      <input id="q" type="text" placeholder="Pesquisar nome…" autofocus>
+      <button class="btn active" id="regexToggle">Regex: ligado</button>
+    </div>
+    <div class="controls">
+      <button class="chip active" data-g="all">Todos</button>
+      <button class="chip" data-g="F">Femininos</button>
+      <button class="chip" data-g="M">Masculinos</button>
+      <button class="chip" data-g="U">Unissexo</button>
+    </div>
+    <div class="controls">
+      <span class="len-label">Nº de letras:</span>
+      <input type="number" id="lenMin" min="1" placeholder="mín.">
+      <span class="len-label">a</span>
+      <input type="number" id="lenMax" min="1" placeholder="máx.">
+    </div>
+    <div class="error" id="err"></div>
+    <div class="hint" id="regexHint">
+      Com regex ligado podes usar padrões, ex.: <code>^Jo</code> (começa por Jo),
+      <code>a$</code> (termina em a), <code>[ck]</code> (contém c ou k).
+    </div>
+  </div>
+
+  <div class="count" id="count"></div>
+  <div class="grid" id="results"></div>
+  <div class="empty" id="empty" style="display:none">Nenhum nome encontrado.</div>
+  <div class="pagination" id="pagination" style="display:none">
+    <button class="btn" id="prevPage">&larr; Anterior</button>
+    <span id="pageInfo"></span>
+    <button class="btn" id="nextPage">Seguinte &rarr;</button>
+  </div>
+
+  <footer>
+    <a href="https://github.com/a104437ana/nomes-portugal" target="_blank" rel="noopener">github.com/a104437ana/nomes-portugal</a>
+  </footer>
+</div>
+
+<script>
+let NAMES = [];
+let genderFilter = "all";
+let regexMode = true;
+let page = 1;
+const PAGE_SIZE = 100;
+
+const qInput = document.getElementById("q");
+const lenMinInput = document.getElementById("lenMin");
+const lenMaxInput = document.getElementById("lenMax");
+const errEl = document.getElementById("err");
+const resultsEl = document.getElementById("results");
+const countEl = document.getElementById("count");
+const emptyEl = document.getElementById("empty");
+const regexToggle = document.getElementById("regexToggle");
+const regexHint = document.getElementById("regexHint");
+const chips = document.querySelectorAll(".chip[data-g]");
+const paginationEl = document.getElementById("pagination");
+const pageInfoEl = document.getElementById("pageInfo");
+const prevPageBtn = document.getElementById("prevPage");
+const nextPageBtn = document.getElementById("nextPage");
+
+function escapeHtml(s) {
+  return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+function highlight(name, re) {
+  if (!re) return escapeHtml(name);
+  const m = name.match(re);
+  if (!m || m[0] === "") return escapeHtml(name);
+  const start = m.index;
+  const end = start + m[0].length;
+  return (
+    escapeHtml(name.slice(0, start)) +
+    "<mark>" + escapeHtml(name.slice(start, end)) + "</mark>" +
+    escapeHtml(name.slice(end))
+  );
+}
+
+function render() {
+  const query = qInput.value.trim();
+  errEl.textContent = "";
+  let filtered = NAMES;
+
+  if (genderFilter === "F" || genderFilter === "M") {
+    filtered = filtered.filter((n) => n.genero === genderFilter || n.genero === "U");
+  } else if (genderFilter === "U") {
+    filtered = filtered.filter((n) => n.genero === "U");
+  }
+
+  const lenMin = parseInt(lenMinInput.value, 10);
+  const lenMax = parseInt(lenMaxInput.value, 10);
+  if (!isNaN(lenMin)) {
+    filtered = filtered.filter((n) => n.nome.length >= lenMin);
+  }
+  if (!isNaN(lenMax)) {
+    filtered = filtered.filter((n) => n.nome.length <= lenMax);
+  }
+
+  let re = null;
+  if (query) {
+    if (regexMode) {
+      try {
+        re = new RegExp(query, "i");
+      } catch (e) {
+        errEl.textContent = "Regex inválida: " + e.message;
+        resultsEl.innerHTML = "";
+        countEl.textContent = "";
+        emptyEl.style.display = "none";
+        return;
+      }
+      filtered = filtered.filter((n) => re.test(n.nome));
+    } else {
+      const needle = query.toLowerCase();
+      re = new RegExp(needle.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i");
+      filtered = filtered.filter((n) => n.nome.toLowerCase().includes(needle));
+    }
+  }
+
+  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  if (page > totalPages) page = totalPages;
+  if (page < 1) page = 1;
+  const start = (page - 1) * PAGE_SIZE;
+  const shown = filtered.slice(start, start + PAGE_SIZE);
+
+  countEl.textContent = filtered.length
+    ? `${filtered.length} resultado${filtered.length === 1 ? "" : "s"}`
+    : "";
+
+  resultsEl.innerHTML = shown
+    .map((n) => {
+      const tags =
+        n.genero === "U"
+          ? '<span class="tag F">F</span><span class="tag M">M</span>'
+          : `<span class="tag ${n.genero}">${n.genero}</span>`;
+      return `<div class="name"><span>${highlight(n.nome, re)}</span><span class="tags">${tags}</span></div>`;
+    })
+    .join("");
+
+  emptyEl.style.display = filtered.length === 0 ? "block" : "none";
+
+  paginationEl.style.display = filtered.length > PAGE_SIZE ? "flex" : "none";
+  pageInfoEl.textContent = `Página ${page} de ${totalPages}`;
+  prevPageBtn.disabled = page <= 1;
+  nextPageBtn.disabled = page >= totalPages;
+}
+
+qInput.addEventListener("input", () => {
+  page = 1;
+  render();
+});
+
+[lenMinInput, lenMaxInput].forEach((input) => {
+  input.addEventListener("input", () => {
+    page = 1;
+    render();
+  });
+});
+
+regexToggle.addEventListener("click", () => {
+  regexMode = !regexMode;
+  regexToggle.textContent = "Regex: " + (regexMode ? "ligado" : "desligado");
+  regexToggle.classList.toggle("active", regexMode);
+  regexHint.style.display = regexMode ? "block" : "none";
+  page = 1;
+  render();
+});
+
+chips.forEach((chip) => {
+  chip.addEventListener("click", () => {
+    chips.forEach((c) => c.classList.remove("active"));
+    chip.classList.add("active");
+    genderFilter = chip.dataset.g;
+    page = 1;
+    render();
+  });
+});
+
+prevPageBtn.addEventListener("click", () => {
+  page -= 1;
+  render();
+  resultsEl.scrollIntoView({ block: "nearest" });
+});
+
+nextPageBtn.addEventListener("click", () => {
+  page += 1;
+  render();
+  resultsEl.scrollIntoView({ block: "nearest" });
+});
+
+fetch("data/nomes_genero.json")
+  .then((r) => r.json())
+  .then((data) => {
+    NAMES = data;
+    render();
+  })
+  .catch((e) => {
+    errEl.textContent = "Erro ao carregar dados: " + e.message;
+  });
+</script>
+</body>
+</html>
