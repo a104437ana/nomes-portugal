@@ -186,8 +186,9 @@
     justify-content: center;
     gap: 1rem;
     margin-top: 1.25rem;
+    margin-bottom: 1.25rem;
   }
-  .pagination #pageInfo {
+  .pagination .page-info {
     color: var(--muted);
     font-size: 0.85rem;
   }
@@ -238,12 +239,17 @@
   </div>
 
   <div class="count" id="count"></div>
+  <div class="pagination pagination-top" style="display:none">
+    <button class="btn prev-page">&larr; Anterior</button>
+    <span class="page-info"></span>
+    <button class="btn next-page">Seguinte &rarr;</button>
+  </div>
   <div class="grid" id="results"></div>
   <div class="empty" id="empty" style="display:none">Nenhum nome encontrado.</div>
-  <div class="pagination" id="pagination" style="display:none">
-    <button class="btn" id="prevPage">&larr; Anterior</button>
-    <span id="pageInfo"></span>
-    <button class="btn" id="nextPage">Seguinte &rarr;</button>
+  <div class="pagination pagination-bottom" style="display:none">
+    <button class="btn prev-page">&larr; Anterior</button>
+    <span class="page-info"></span>
+    <button class="btn next-page">Seguinte &rarr;</button>
   </div>
 
   <footer>
@@ -268,10 +274,10 @@ const emptyEl = document.getElementById("empty");
 const regexToggle = document.getElementById("regexToggle");
 const regexHint = document.getElementById("regexHint");
 const chips = document.querySelectorAll(".chip[data-g]");
-const paginationEl = document.getElementById("pagination");
-const pageInfoEl = document.getElementById("pageInfo");
-const prevPageBtn = document.getElementById("prevPage");
-const nextPageBtn = document.getElementById("nextPage");
+const paginationEls = document.querySelectorAll(".pagination");
+const pageInfoEls = document.querySelectorAll(".page-info");
+const prevPageBtns = document.querySelectorAll(".prev-page");
+const nextPageBtns = document.querySelectorAll(".next-page");
 
 function escapeHtml(s) {
   return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -352,10 +358,11 @@ function render() {
 
   emptyEl.style.display = filtered.length === 0 ? "block" : "none";
 
-  paginationEl.style.display = filtered.length > PAGE_SIZE ? "flex" : "none";
-  pageInfoEl.textContent = `Página ${page} de ${totalPages}`;
-  prevPageBtn.disabled = page <= 1;
-  nextPageBtn.disabled = page >= totalPages;
+  const showPagination = filtered.length > PAGE_SIZE;
+  paginationEls.forEach((el) => (el.style.display = showPagination ? "flex" : "none"));
+  pageInfoEls.forEach((el) => (el.textContent = `Página ${page} de ${totalPages}`));
+  prevPageBtns.forEach((btn) => (btn.disabled = page <= 1));
+  nextPageBtns.forEach((btn) => (btn.disabled = page >= totalPages));
 }
 
 qInput.addEventListener("input", () => {
@@ -389,16 +396,20 @@ chips.forEach((chip) => {
   });
 });
 
-prevPageBtn.addEventListener("click", () => {
-  page -= 1;
-  render();
-  resultsEl.scrollIntoView({ block: "nearest" });
+prevPageBtns.forEach((btn) => {
+  btn.addEventListener("click", () => {
+    page -= 1;
+    render();
+    window.scrollTo({ top: 0 });
+  });
 });
 
-nextPageBtn.addEventListener("click", () => {
-  page += 1;
-  render();
-  resultsEl.scrollIntoView({ block: "nearest" });
+nextPageBtns.forEach((btn) => {
+  btn.addEventListener("click", () => {
+    page += 1;
+    render();
+    window.scrollTo({ top: 0 });
+  });
 });
 
 fetch("data/nomes_genero.json")
