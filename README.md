@@ -21,3 +21,6 @@ python3 scripts/parse_pdf.py
 python3 scripts/unificar_genero.py
 ```
 
+## Stars
+[![a104437ana/nomes-portugal stars](https://repo-stars.vercel.app/api/stars-badge?repo=a104437ana%2Fnomes-portugal)](https://repo-stars.vercel.app)
+[![a104437ana/nomes-portugal stars](https://repo-stars.vercel.app/api/svg?repo=a104437ana%2Fnomes-portugal)](https://repo-stars.vercel.app)
