@@ -1,8 +1,8 @@
 # nomes-portugal
 
-Site estático para pesquisar e filtrar a lista de nomes próprios do IRN (Instituto dos Registos e do Notariado).
+Site estático para pesquisar e filtrar a lista de nomes próprios, baseado no [documento oficial do IRN](https://irn.justica.gov.pt/Portals/33/Regras%20Nome%20Proprio/Lista%20Nomes%20Pr%C3%B3prios.pdf?ver=WNDmmwiSO3uacofjmNoxEQ%3D%3D), de 2021.
 
-Não é um site oficial do IRN.
+**Site:** https://nomes-portugal.vercel.app
 
 ## Usar
 
